@@ -18,6 +18,11 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 # Copy the rest of your application code into the container
 COPY . .
 
+# EXPLICITLY TELL DOCKER TO EXPOSE RELEVANT ENVIRONMENT VARIABLES
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV GROQ_API_KEY=${GROQ_API_KEY}
+
 # Expose the default port Hugging Face Spaces listens to for containers (7860)
 EXPOSE 7860
 
