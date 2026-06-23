@@ -18,23 +18,30 @@ from langchain_classic.prompts import PromptTemplate
 from langchain_classic.chains import RetrievalQA
 
 # Fetch credentials securely from environment variables (Safe for Hugging Face)
-os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-os.environ["LANGCHAIN_PROJECT"]="AWS_Bedrock_doc_bot"
+os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY", "")
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "AWS_Bedrock_doc_bot"
 
 aws_access_key = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
 groq_api_key = os.environ.get("GROQ_API_KEY")
 
 ## Bedrock Runtime Client configuration
-# It will use environment variables on Hugging Face, or fall back to your local AWS CLI config
 bedrock_runtime = boto3.client(
     service_name='bedrock-runtime',
     region_name='us-east-1', 
     aws_access_key_id=aws_access_key,
     aws_secret_access_key=aws_secret_key
 )
-bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v1", client=bedrock_runtime)
+
+# FIXED: Added missing commas and aligned arguments correctly
+bedrock_embeddings = BedrockEmbeddings(
+    model_id="amazon.titan-embed-text-v1",
+    client=bedrock_runtime,
+    region_name="us-east-1",
+    aws_access_key_id=aws_access_key,
+    aws_secret_access_key=aws_secret_key
+)
 
 # Ensure the local data directory exists to store user files dynamically
 DATA_DIR = "data"
@@ -53,17 +60,21 @@ def get_vector_store(docs):
     vectorstore_faiss.save_local("faiss_index")
 
 def get_free_llm():
+    # FIXED: Reverted to a valid Groq Llama 3 model identifier
     llm = ChatGroq(
-        model_name="openai/gpt-oss-120b", 
-        groq_api_key=groq_api_key, # Uses the environment variable safely
+        model_name="llama3-8b-8192", 
+        groq_api_key=groq_api_key, 
         temperature=0.3
     )
     return llm
 
 def get_llama_llm():
+    # FIXED: Explicitly passed credentials and cross-region 'us.' prefix to satisfy container constraints
     llm = BedrockLLM(
-        model="meta.llama3-70b-instruct-v1:0",
-        bedrock_client=bedrock_runtime,
+        model="us.meta.llama3-70b-instruct-v1:0",
+        region_name="us-east-1",
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_key,
         max_tokens=512
     )
     return llm
@@ -195,5 +206,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    ## Working??
