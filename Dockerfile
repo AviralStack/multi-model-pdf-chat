@@ -21,5 +21,5 @@ COPY . .
 # Expose the default port Hugging Face Spaces listens to for containers (7860)
 EXPOSE 7860
 
-# Command to run Streamlit correctly inside a Docker container on Hugging Face
-CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
+# CMD updated to completely disable XSRF and CORS blockages within the HF iframe
+CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0", "--server.enableXsrfProtection=false", "--server.enableCORS=false"]
