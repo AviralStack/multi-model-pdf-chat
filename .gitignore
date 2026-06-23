@@ -1,0 +1,31 @@
+# Local Vector Databases (Generated locally by FAISS)
+faiss_index/
+
+# User Data Storage (PDFs uploaded during testing)
+data/
+*.pdf
+
+# Environment Variables & API Keys
+.env
+.env.local
+.env.*
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+pyvenv.cfg
+.Python
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Streamlit specific logs and runtime configurations
+.streamlit/

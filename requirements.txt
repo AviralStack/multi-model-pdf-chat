@@ -1,0 +1,10 @@
+streamlit
+boto3
+numpy
+langchain-aws
+langchain-groq
+langchain-text-splitters
+langchain-community
+langchain-classic
+faiss-cpu
+pypdf
