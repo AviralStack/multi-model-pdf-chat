@@ -29,3 +29,6 @@ __pycache__/
 
 # Streamlit specific logs and runtime configurations
 .streamlit/
+
+# Docker local artifacts
+.dockerignore
