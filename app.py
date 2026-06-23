@@ -62,7 +62,7 @@ def get_vector_store(docs):
 def get_free_llm():
     # FIXED: Reverted to a valid Groq Llama 3 model identifier
     llm = ChatGroq(
-        model_name="llama3-8b-8192", 
+        model_name="openai/gpt-oss-120b", 
         groq_api_key=groq_api_key, 
         temperature=0.3
     )
@@ -71,7 +71,7 @@ def get_free_llm():
 def get_llama_llm():
     # FIXED: Explicitly passed credentials and cross-region 'us.' prefix to satisfy container constraints
     llm = BedrockLLM(
-        model="us.meta.llama3-70b-instruct-v1:0",
+        model="meta.llama3-70b-instruct-v1:0",
         region_name="us-east-1",
         aws_access_key_id=aws_access_key,
         aws_secret_access_key=aws_secret_key,
